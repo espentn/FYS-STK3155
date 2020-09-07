@@ -35,7 +35,10 @@ def create_design_matrix(x, y, n):
 	X = np.ones((N,p))
 
 	for i in range(1, n+1):
-		q = int()
+		q = int(i*(i+1)/2)
+		for j in range(i+1):
+			X[:,q+j] = (x**(i-j))*(y**j)
+	return X
 
 
 # Make data.
