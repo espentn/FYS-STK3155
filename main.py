@@ -25,6 +25,19 @@ def R2(z_data, z_model):
 	n = np.size(z_data)
 	return 1 - np.sum((z_data-z_model)**2)/np.sum((z_data-(np.sum(z_data)/n))**2)
 
+def create_design_matrix(x, y, n):
+	if len(x.shape) > 1:
+		x = np.ravel(x)
+		y = np.ravel(y)
+
+	N = len(x)
+	p = int((n+1)*(n+2)/2)
+	X = np.ones((N,p))
+
+	for i in range(1, n+1):
+		q = int()
+
+
 # Make data.
 x = np.arange(0, 1, 0.05)
 y = np.arange(0, 1, 0.05)
