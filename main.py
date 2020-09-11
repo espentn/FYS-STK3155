@@ -47,11 +47,12 @@ def create_design_matrix(x, y):
 	return X
 
 
-def fitBeta(self,X, z_data):
+def predict(X, z_data):
 	beta = np.linalg.inv(X.T.dot(X)).dot(X.T).dot(z_data)
-    return beta.T
+	ztilde = X @ beta
+    return ztilde
 
-def trainData(x,z):
+def splitData(x,z):
     X_train, X_test, z_train, z_test = train_test_split(x,z,test_size=0.3)
     scaler = StandardScaler()
     scaler.fit(X_train)
