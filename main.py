@@ -4,8 +4,9 @@ from matplotlib import cm
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 import numpy as np
 from random import random, seed
-from scikot-learn import train_test_split
+#from scikot-learn import train_test_split
 from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
 
 fig = plt.figure()
 ax = fig.gca(projection='3d')
@@ -21,7 +22,7 @@ def frankeFunction(x,y):
 
 def createDataPoints(x,y):
 	x_d, y_d = np.meshgrid(x,y)
-	z_d = FrankeFunction(x_d,y_d)
+	z_d = frankeFunction(x_d,y_d)
 	return x_d, y_d, z_d
 
 # Need to flatten the matrices to be able to compute the beta
@@ -50,7 +51,7 @@ def create_design_matrix(x, y):
 def predict(X, z_data):
 	beta = np.linalg.inv(X.T.dot(X)).dot(X.T).dot(z_data)
 	ztilde = X @ beta
-    return ztilde
+	return ztilde
 
 def splitData(x,z):
     X_train, X_test, z_train, z_test = train_test_split(x,z,test_size=0.3)
