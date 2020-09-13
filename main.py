@@ -4,7 +4,6 @@ from matplotlib import cm
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 import numpy as np
 from random import random, seed
-#from scikot-learn import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 
@@ -13,45 +12,45 @@ ax = fig.gca(projection='3d')
 
 
 def frankeFunction(x,y):
-	#noise = np.random.normal(0.5,1,len(x))
-	term1 = 0.75*np.exp(-(0.25*(9*x-2)**2) - 0.25*((9*y-2)**2))
-	term2 = 0.75*np.exp(-((9*x+1)**2)/49.0 - 0.1*(9*y+1))
-	term3 = 0.5*np.exp(-(9*x-7)**2/4.0 - 0.25*((9*y-3)**2))
-	term4 = -0.2*np.exp(-(9*x-4)**2 - (9*y-7)**2)
-	return term1 + term2 + term3 + term4 #+ noise
+    #noise = np.random.normal(0.5,1,len(x))
+    term1 = 0.75*np.exp(-(0.25*(9*x-2)**2) - 0.25*((9*y-2)**2))
+    term2 = 0.75*np.exp(-((9*x+1)**2)/49.0 - 0.1*(9*y+1))
+    term3 = 0.5*np.exp(-(9*x-7)**2/4.0 - 0.25*((9*y-3)**2))
+    term4 = -0.2*np.exp(-(9*x-4)**2 - (9*y-7)**2)
+    return term1 + term2 + term3 + term4 #+ noise
 
 def createDataPoints(x,y):
-	x_d, y_d = np.meshgrid(x,y)
-	z_d = frankeFunction(x_d,y_d)
-	return x_d, y_d, z_d
+    x_d, y_d = np.meshgrid(x,y)
+    z_d = frankeFunction(x_d,y_d)
+    return x_d, y_d, z_d
 
 # Need to flatten the matrices to be able to compute the beta
 def convertDataPoints(x,y,z):
-	x_d = np.ravel(x)
-	y_d = np.ravel(y)
-	z_d = np.ravel(z)
-	return x_d, y_d, z_d
+    x_d = np.ravel(x)
+    y_d = np.ravel(y)
+    z_d = np.ravel(z)
+    return x_d, y_d, z_d
 
-def create_design_matrix(x, y):
-	if len(x.shape) > 1:
-		x = np.ravel(x)
-		y = np.ravel(y)
+def createDesignMatrix(x, y, n):
+    if len(x.shape) > 1:
+        x = np.ravel(x)
+        y = np.ravel(y)
 
-	n = len(x)
-	p = int((n+1)*(n+2)/2)
-	X = np.ones((N,p))
+    N = len(x)
+    p = int((n+1)*(n+2)/2)
+    X = np.ones((N,p))
 
-	for i in range(1, n+1):
-		q = int(i*(i+1)/2)
-		for j in range(i+1):
-			X[:,q+j] = (x**(i-j))*(y**j)
-	return X
+    for i in range(1, n+1):
+        q = int(i*(i+1)/2)
+        for j in range(i+1):
+            X[:,q+j] = (x**(i-j))*(y**j)
+    return X
 
 
 def predict(X, z_data):
-	beta = np.linalg.inv(X.T.dot(X)).dot(X.T).dot(z_data)
-	ztilde = X @ beta
-	return ztilde
+    beta = np.linalg.inv(X.T.dot(X)).dot(X.T).dot(z_data)
+    ztilde = X @ beta
+    return ztilde
 
 def splitData(x,z):
     X_train, X_test, z_train, z_test = train_test_split(x,z,test_size=0.3)
@@ -64,12 +63,12 @@ def splitData(x,z):
     return ztilde
 
 def MSE(z_data, z_model):
-	n = np.size(z_model)
-	return np.sum((z_data-z_model)**2)/n
+    n = np.size(z_model)
+    return np.sum((z_data-z_model)**2)/n
 
 def R2(z_data, z_model):
-	n = np.size(z_data)
-	return 1 - np.sum((z_data-z_model)**2)/np.sum((z_data-(np.sum(z_data)/n))**2)
+    n = np.size(z_data)
+    return 1 - np.sum((z_data-z_model)**2)/np.sum((z_data-(np.sum(z_data)/n))**2)
 
 
 
