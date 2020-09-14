@@ -19,9 +19,11 @@ def frankeFunction(x,y):
 	term4 = -0.2*np.exp(-(9*x-4)**2 - (9*y-7)**2)
 	return term1 + term2 + term3 + term4 #+ noise
 
-def createDataPoints(x,y):
+def createDataPoints():
+	x = np.arange(0, 1, 0.05)
+	y = np.arange(0, 1, 0.05)
 	x_d, y_d = np.meshgrid(x,y)
-	z_d = FrankeFunction(x_d,y_d)
+	z_d = frankeFunction(x_d,y_d)
 	return x_d, y_d, z_d
 
 # Need to flatten the matrices to be able to compute the beta
@@ -72,15 +74,11 @@ def R2(z_data, z_model):
 
 
 
-# Make data.
-x = np.arange(0, 1, 0.05)
-y = np.arange(0, 1, 0.05)
-noise = np.random.rand()
+# Make data
+x_d, y_d, z_d = createDataPoints()
 
-x, y = np.meshgrid(x,y)
-z = frankeFunction(x, y)
 
-# Plot the surface.
+# Plot the surface (ORGANIZE PLOTTING INTO FUNCTIONS)
 surf = ax.plot_surface(x, y, z, cmap=cm.coolwarm,
 linewidth=0, antialiased=False)
 
