@@ -56,15 +56,13 @@ def predict(X, z_data):
     ztilde = X @ beta
     return ztilde
 
-def splitData(x,z):
+def splitAndScale(x,z):
     X_train, X_test, z_train, z_test = train_test_split(x,z,test_size=0.3)
     scaler = StandardScaler()
     scaler.fit(X_train)
     X_train_scaled = scaler.transform(X_train)
     X_test_scaled = scaler.transform(X_test)
-    Beta = np.linalg.inv(X_train.T.dot(X_train)).dot(X_train.T).dot(z_train)
-    ztilde = X_train @ Beta
-    return ztilde
+    return X_train_scaled, X_test_scaled, z_train, z_test
 
 def MSE(z_data, z_model):
     n = np.size(z_model)
@@ -81,7 +79,7 @@ x_d, y_d, z_d = createDataPoints()
 
 
 # Plot the surface (ORGANIZE PLOTTING INTO FUNCTIONS)
-surf = ax.plot_surface(x, y, z, cmap=cm.coolwarm,
+surf = ax.plot_surface(x_d, y_d, z_d, cmap=cm.coolwarm,
 linewidth=0, antialiased=False)
 
 # Customize the z axis.
