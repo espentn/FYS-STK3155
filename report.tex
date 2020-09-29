@@ -50,12 +50,18 @@ The design matrix
 \end{equation}
 
 \subsection{Ordinary Least Squares}
-
+\begin{equation}
+C(\textbf{X},\beta) = \dfrac{1}{n} \{( \textbf{y}-\textbf{X}\beta^{T}\textbf{y}-\textbf{X}\beta)\}
+\end{equation}
 \subsection{Ridge Regression}
+\begin{equation}
+C(\textbf{X},\beta) = \dfrac{1}{n} \{( \textbf{y}-\textbf{X}\beta^{T}\textbf{y}-\textbf{X}\beta)\} + \lambda \beta^{T} \beta 
+\end{equation}
 \subsection{Lasso Regression}
 \subsection{The bootstrap}
+The boostrap resampling method is a simple Monte Carlo technique to approximate the sampling distribution. 
 \subsection{k-fold Cross Validation}
-
+As the name implies, the k-fold Cross Validation 
 \section{Data}
 \subsection{Franke's function}
 The Franke's function will be used as a basis for our discussion of the various regression and resampling methods in this context. This is a function  widely used as a test function in interpolation problems.
@@ -65,7 +71,7 @@ f(x,y) &= \frac{3}{4}exp\left(-\frac{(9x-2)^2}{4} - \frac{(9y-2)^2}{4}\right)+\f
 &+ \frac{1}{2}exp\left(-\frac{(9x-7)^2}{4} - \frac{(9y-3)^2}{4}\right)-\frac{1}{5}exp\left(-(9x-4)^2 - (9y-7)^2\right)
 \end{align*}
 \section{Method}
-The Franke function is a multivariable function, depending on both $x$ and $y$, and hence is a 2-variable polynomial of degree N. The design matrix in \ref{designM} thus needs to be adjusted for this multivariable case. The 
+The Franke function is a multivariable function, depending on both $x$ and $y$, and hence is a 2-variable polynomial. The design matrix in \ref{designM} thus needs to be adjusted for this multivariable case. The 
 $$\textbf{X} = \begin{bmatrix}
 1 & x_{0} & y_{0} & x_{0}y_{0} & \dots & x_{0}^{N} & y_{0}^{N}     \\
 1 & x_{0} & y_{1} & x_{0}y_{1} & \dots & x_{0}^{N} & y_{1}^{N}  \\
