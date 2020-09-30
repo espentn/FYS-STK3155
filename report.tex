@@ -105,15 +105,81 @@ $$\textbf{X} = \begin{bmatrix}
 \end{bmatrix}$$
 \section{Results}
 \subsection{Ordinary least squares on the Franke Function}
+In this part, we performed the plain OLS regression on the data that is generated using the Franke function. Before that, we split the data into training set, on which the model is trained, and a testing sets, on which the model’s performance is evaluated for the goodness of the fit. The ratio of training to testing sets 70/30.
+
+For performing the OLS, a polynomial of degree five was used to generate the features of the model, and then these features were scaled according to the training data statistics, in order to force the data into a distribution with zero mean and unit variance. This is useful because it ensures that each feature gets an equal chance of being represented in the polynomial, thus preventing features with large values to dominantly control the shape of the polynomial.
+
+The metrics were then applied to both sets and the R2 coefficient and the Mean Square Error of each set were calculated. In addition, we generated a plot of the confidence intervals of the tunable parameters, shown in figure \ref{fig:confint}.
+
+The Mean Square error was calculated by
+\begin{equation}\label{mse}
+MSE(y,\tilde{y}) = \dfrac{1}{n}\sum_{i=0}^{n-1} (y_{i} - \tilde{y}_{i})^{2}
+\end{equation}
+and the R2 coefficient was calculated by
+\begin{equation}\label{r2}
+R^{2}(y,\tilde{y}) = 1 - \dfrac{\sum_{i=0}^{n-1} (y_{i} - \tilde{y}_{i})^{2}}{\sum_{i=0}^{n-1} (y_{i} - \overline{y}_{i})^{2}}
+\end{equation}
+where $\overline{y}$ is defined as
+\begin{equation}
+\overline{y} = \dfrac{1}{n} \sum_{i=0}^{n-1} y_{i}
+\end{equation}
+\begin{figure}
 \includegraphics[scale=0.5]{confidenceintervall.png}
 \centering
+\caption{Confidence intervall of the tunable paramteres}
+\label{fig:confint}
+\end{figure}
+
+In our demonstration, we noticed that if the design matrix is created from data points within the range of [0,1], then the resulting  matrix would be close to singularity, and the program would thus raise an error whenever the inverse is calculated, particularly when calculating  or its variance. This, in turn, caused the problem of getting negative values for the variance of some values. Using pinv, however, instead of inv, solved both problems when calculating the inverses.
+
+It is also worth mentioning that when the range of values that the raw features can take is increased to, say, [0,5], instead of [0,1], the problem of singular matrices immediately disappears even when using inv and the determinant of the matrix  becomes greater than zero.
 
 \subsection{Bias-variance trade-off and resampling techniques}
+When evaluating the model’s performance on the test data that the model has not seen before, we want to measure the difference/error between the model’s predictions and the true values. This error can be split into three terms.
+
+The bias term is a quantity that describes how much the data is shifted from the mean value of the model. A high bias indicates that the model is not able to represent the patterns in the underlying data.
+
+Variance, on the other hand, represents the variance of the predicted data from its corresponding mean, and it describes the sensitivity of the model to the noise in the data. Thus, high variance indicates that the model has not only learned the underlying model, but went further to even capture the noise in the data.
+
+A model that is simple and does not capture the underlying trends in the data is called an underfitting model, and has high bias and low variance. On the other hand, a model that is too complex will likely result in overfitting, in which case it would have low bias and high variance.
+
+Last is the irreducible error term. This represents the error that is not related to the complexity of the model and that cannot be reduced no matter how good and tuned the model is, with a given set of predictors. This error term is given by the variance of the noise in the data, and can be reduced by recognizing more independent predictors that are also related to the dependent variable.
+
+Figure \ref{fig:plot} (add figure for bias variance tradeoff) shows the trends in the bias and the variance as a function of the model’s complexity. 
+
+As expected, at low degrees of complexity, the model suffers from under-fitting as a low order polynomial cannot reasonably represent a complex function with exponential and quadratic terms. This is shown by the high bias for polynomials of low order.
+
+As the complexity increases, the bias starts decreasing indicating that the model is no longer deficient of approximating the overall shape and trends in the data. At a certain polynomial degree (5), the model reaches a balance between bias and variance, where the overall error is the lowest. Such a model is a model that has learned the trends in the data but has not yet entered the stage of memorizing the training data and adapting itself to the noise/idiosyncrasies in the training data.
+
+When the polynomial degree exceeds 5, the variance starts to increase in value indicating that the model has now entered into the realm of over-fitting. This variance will keep increasing as the complexity increases until the model has learned all the noise in the training data. This additional learning negatively impacts the model’s performance on new data and inhibits its ability to generalize to the domain of interest, which is the ultimate goal of any machine learning algorithm.
+
+\begin{figure}
 \includegraphics[scale=0.5]{partBplot.jpg}
 \centering
+\caption{Plot}
+\label{fig:plot}
+\end{figure}
+
+\begin{figure}
+\includegraphics[scale=0.35]{frankePlots.png}
+\caption{OLS on the Franke function, with increasing polynomial degree}
+\end{figure}
+
+\subsection{Cross-validation as resampling techniques}
+In this part, we performed a k-fold cross validation analysis to estimate the value of the Mean Square Error of our model of a seventh degree polynomial. We estimated this quantity using 5 and 10 folds.
+
+The cross validation analysis gives estimates of 0.0033 and 0.0021, for 5- and 10-folds, respectively, which are both relatively lower than the estimate of this quantity from bootstrap at the same model complexity, 0.1019. This illustrates the fact that cross validation gives an over optimistic estimate for this error.
+
+It is also important to note that the bootstrap approach is closer to the real scenario because after each bootstrapping iteration, the model is tested on the same test set, whereas in cross validation, each time the test set is changed.
+
+
+\subsection{Ridge regression}
+
+\subsection{Lasso regression}
 
 \subsection{Bootstrap}
 \includegraphics[scale=1]{boostrapridge0.png}
 \includegraphics[scale=1]{boostrapridge1.png}
+
 \end{document}
 
