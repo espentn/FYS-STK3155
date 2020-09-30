@@ -4,6 +4,8 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{blindtext}
+\usepackage{biblatex}
+\usepackage{graphicx}
 \title{Project 1}
 \author{Espen Ulset Nordsveen
 \and Ghadi Al Hajj}
@@ -15,12 +17,17 @@ Linear regression is an important tool within the field of statistics and data a
 This tool is used in several fields of science spanning medicine, physics, finance, astronomy...
 
 In this project, our goal was to analyse and compare the performance of various linear regression methods, namely the Ordinary Least Squares (OLS), Ridge regression and the Lasso regression. These methods were combined with resampling techniques like the bootstrap and cross validation techniques to get better estimates of the error, specifically on the test data. In addition, bootstrap was used to perform a bias-variance tradeoff analysis for all methods.
-$$\sum_{n=1}^{N} \beta\textbf{X} $$
+
 \subsection{Linear Regression}
-\begin{equation}
-\textbf{y} = \textbf{X}\beta + \epsilon
+As mentioned, linear regression attemps to find a relationship between two or more variables by fitting a linear equation to observed data. We denote the dependent variable, or outcome, as $\textbf{y}$. If we have a set of independent variables, or features, $\textbf{X}^{T} = (X_{1}, X_{2}, \dots, X_{p})$, and assuming a linear relationship between these, the $y$ can be predicted as
+\begin{equation} \label{ytilde}
+\tilde{y} = \tilde{\beta_{0}} + \sum_{j=1}^{p} X_{j} \tilde{\beta_{j}}
 \end{equation}
-where $\epsilon$ denotes the deviation of the linear model $\textbf{X}\beta$, and the $\beta$ is the parameter vector containing the linear regression coefficients $\beta_{i}$. $y$, $\textbf{X}$ and $\epsilon$ are defined as the following vectors
+By including the constant variable 1 in $X$, and include $\tilde{\beta_{0}}$ in the vector of coefficients $\tilde{\beta}$,  (\ref{ytilde}) can be written in vector form as
+\begin{equation}
+\textbf{y} = \textbf{X} \beta + \epsilon
+\end{equation}
+where $\epsilon$ denotes the residual error of the linear model $\textbf{X}\beta$ from the true response, and the $\beta$ is the parameter vector containing the linear regression coefficients $\beta_{i}$. $y$, $\textbf{X}$ and $\epsilon$ are defined as the following vectors
 \begin{equation}
 \textbf{y} = [y_{0}, y_{1}, y_{2}, \dots, y_{n-1}]^{T}
 \end{equation}
@@ -32,7 +39,7 @@ where $\epsilon$ denotes the deviation of the linear model $\textbf{X}\beta$, an
 \begin{equation}
 \epsilon = [\epsilon_{0}, \epsilon_{1}, \epsilon_{2}, \dots, \epsilon_{n-1}]^{T}
 \end{equation}
-
+and $\beta$ are in fact the unknown parameters in the linear regression problems that needs to be calculated.
 \begin{equation}
 \textbf{\~{y}} = \textbf{X}\beta + \epsilon
 \end{equation}
@@ -59,9 +66,25 @@ C(\textbf{X},\beta) = \dfrac{1}{n} \{( \textbf{y}-\textbf{X}\beta^{T}\textbf{y}-
 \end{equation}
 \subsection{Lasso Regression}
 \subsection{The bootstrap}
-The boostrap resampling method is a simple Monte Carlo technique to approximate the sampling distribution. 
+The boostrap resampling method is a simple Monte Carlo technique to approximate the sampling distribution (KILDE). The method randomly draw $B$ datasets with replacement from the training data, where each sample is the same size as the original training set. The model is then refit to the $B$ bootstrap datasets. In the context of this project, we use this method to calculate MSE, bias and variance of the model.
 \subsection{k-fold Cross Validation}
-As the name implies, the k-fold Cross Validation 
+The $k$-fold Cross Validation technique is a resampling procedure used to evaluate the performance of statistical models on a limited data sample. The method generally results in a less biased or less optimistic estimate of the model compared to other methods, such as the train/test split. The \textit{k} refers to the equally number of groups the given sample shall be split into. One of these groups are set aside as the validation group. The rest of the groups, i.e. $K-1$, are used to fit the model, and calculate the prediction error of the fitted model when predicting the $k$th part of the data. A normal value for $k$ is $K=5$, as this gives a lower variance. It might, however, give problems with the bias if the training sets becomes too small.
+
+The general procedure for the $k$-fold Cross Validation is as follows (KILDE)
+\begin{enumerate}
+\item Shuffle the dataset
+\item Split the dataset into $k$ groups
+\item For each unique group
+\begin{enumerate}
+\item Take the group as a hold out or test data set
+\item Take the remaining groups as a training data set
+\item Fit a model on the training set and evaluate it on the test set
+\item Retain the evaluation score and discard the model
+\end{enumerate}
+	
+\item Summarize the skill of the model using the sample of model evaluation scores
+\end{enumerate}
+
 \section{Data}
 \subsection{Franke's function}
 The Franke's function will be used as a basis for our discussion of the various regression and resampling methods in this context. This is a function  widely used as a test function in interpolation problems.
@@ -80,6 +103,17 @@ $$\textbf{X} = \begin{bmatrix}
 \vdots & \vdots & \vdots & \vdots & \dots & \vdots & \vdots \\
 1 & x_{n-1} & y_{m-1} & x_{n-1}y_{m-1} & \dots & x_{n-1}^{N} & y_{m-1}^{N} \\
 \end{bmatrix}$$
+\section{Results}
+\subsection{Ordinary least squares on the Franke Function}
+\includegraphics[scale=0.5]{confidenceintervall.png}
+\centering
 
+\subsection{Bias-variance trade-off and resampling techniques}
+\includegraphics[scale=0.5]{partBplot.jpg}
+\centering
+
+\subsection{Bootstrap}
+\includegraphics[scale=1]{boostrapridge0.png}
+\includegraphics[scale=1]{boostrapridge1.png}
 \end{document}
 
