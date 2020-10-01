@@ -24,10 +24,10 @@ As mentioned, linear regression attemps to find a relationship between two or mo
 \tilde{y} = \tilde{\beta_{0}} + \sum_{j=1}^{p} X_{j} \tilde{\beta_{j}}
 \end{equation}
 By including the constant variable 1 in $X$, and include $\tilde{\beta_{0}}$ in the vector of coefficients $\tilde{\beta}$,  (\ref{ytilde}) can be written in vector form as
-\begin{equation}
+\begin{equation}\label{matrixform}
 \textbf{y} = \textbf{X} \beta + \epsilon
 \end{equation}
-where $\epsilon$ denotes the residual error of the linear model $\textbf{X}\beta$ from the true response, and the $\beta$ is the parameter vector containing the linear regression coefficients $\beta_{i}$. $y$, $\textbf{X}$ and $\epsilon$ are defined as the following vectors
+where $\epsilon$ denotes the residual error of the linear model $\textbf{X}\beta$ from the true response, and the $\beta$ is the parameter vector containing the linear regression coefficients $\beta_{i}$. $y$ and $\epsilon$ are defined as the following vectors
 \begin{equation}
 \textbf{y} = [y_{0}, y_{1}, y_{2}, \dots, y_{n-1}]^{T}
 \end{equation}
@@ -39,12 +39,7 @@ where $\epsilon$ denotes the residual error of the linear model $\textbf{X}\beta
 \begin{equation}
 \epsilon = [\epsilon_{0}, \epsilon_{1}, \epsilon_{2}, \dots, \epsilon_{n-1}]^{T}
 \end{equation}
-and $\beta$ are in fact the unknown parameters in the linear regression problems that needs to be calculated.
-\begin{equation}
-\textbf{\~{y}} = \textbf{X}\beta + \epsilon
-\end{equation}
-
-The design matrix
+and $\beta$ are in fact the unknown parameters in the linear regression problems that needs to be calculated. The $X$ matrix in (\ref{matrixform}) can be expressed as
 \begin{equation} \label{designM}
 \textbf{X} = 
 \begin{bmatrix}
@@ -56,10 +51,26 @@ The design matrix
 \end{bmatrix}
 \end{equation}
 
-\subsection{Ordinary Least Squares}
+With the design matrix defined as (\ref{designM}), we can use this together with the unknown $\beta$ to approximate $y$ as
 \begin{equation}
+\textbf{\~{y}} = \textbf{X}\beta
+\end{equation}
+We see that
+\begin{align}
+\tilde{y} &= \textbf{X}\beta \\
+&= y - \epsilon
+\end{align}
+We therefore need to find $\beta$ values such that the error $\epsilon$ is minimized, which indeed is the true objective of linear regression.
+
+\subsection{Ordinary Least Squares}
+The ordinary least square method is defined by the following cost function
+\begin{equation}\label{costfunctionOLS}
 C(\textbf{X},\beta) = \dfrac{1}{n} \{( \textbf{y}-\textbf{X}\beta^{T}\textbf{y}-\textbf{X}\beta)\}
 \end{equation}
+The function will not be derived here, but it is in fact a estimation of the parameters $\beta$ by minimizing the sum of the squared residuals. The minimization problem of the cost function (\ref{costfunctionOLS}) is solved by derivation of the function. The derivatives of (\ref{costfunctionOLS}) gives the parameterization of $\beta$ as
+\begin{equation}
+\beta = (\textbf{X}^{T}\textbf{X})^{-1}\textbf{X}^{T}\textbf{y}
+\end{equation} 
 \subsection{Ridge Regression}
 \begin{equation}
 C(\textbf{X},\beta) = \dfrac{1}{n} \{( \textbf{y}-\textbf{X}\beta^{T}\textbf{y}-\textbf{X}\beta)\} + \lambda \beta^{T} \beta 
