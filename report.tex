@@ -185,10 +185,34 @@ It is also important to note that the bootstrap approach is closer to the real s
 
 
 \subsection{Ridge regression}
+In this part, we used the same data from a Franke function to study the effect of L2 regularization, i.e. Ridge regression, on the output model and its performance.
+
+For the hyper-parameter , we used four different values on a log-scale from -4 to 1 to create four different models. Specifically, these corresponds to the values 1.0 e-04, 4.6 e-03, 2.2 e-01, and 1.0.
+
+From the figures, it can be seen that as the value of lambda increases the parameters beta and their confidence intervals become more centered around zero. This is because a higher value of  places a higher penalty on high values of , thereby preventing it from taking large values, which can lead to over-fitting.
+
+In the same analysis, comparing the values of the Mean Squared Error across the used values of  shows that the error on the test set decreases with increasing values of lambda whereas the error of the training set increases. This is because, as discussed before, L2 regularization fights over-fitting. Therefore, for higher values of , less emphasis is put on reproducing the training data set with its idiosyncrasies and more importance is placed on learning the general patterns in the training data. This, in turn, improves the model’s ability to generalize to data points that it has not seen before during training.
+
+Next, we applied the bootstrapping method to ridge regression to compare it with the results from OLS regression, and study its behavior in the bias-variance trade-off. The same behavior of decreasing bias and increasing variance is observed, though, the bias’s behavior is more evident at low values of noise variance. However, it it also important to note that as the value of lambda increases it takes the variance additional degrees to emerge and manifest itself. This is, again, expected because regularization fights over-fitting, which a model exhibits when the variance is high.
+
+Moving into cross-validation, the ridge regression model gives a lower estimate of the MSE than OLS at all values of lambda and both number of folds, except at  with five folds. Moreover, similar to the case with OLS, again, cross-validation gives a lower estimate of the error compared to bootstrap.
+
 \includegraphics[scale=1]{boostrapridge0.png}
 \includegraphics[scale=1]{boostrapridge1.png}
 
 \subsection{Lasso regression}
+Complementing our study of OLS and Ridge regression, here, we present a similar study on the Franke function data to study the effect of L1 regularization, i.e. Lasso regression, on the resulting model and its performance.
+
+Here, the values of lambda are the same as those used in Ridge regression.
+
+Similar to Ridge regression, as the value of lambda increases the parameters beta and their confidence intervals become more centered around zero, for the same reason. However, the true difference between Lasso and Ridge is that instead of just centering the values of beta around zero, thereby, preventing them from attaining large values, Lasso takes a step further and actually set some parameters to exactly zero. This behavior is more evident at high values of lambda. In this way, Lasso can be seen as a shrinkage and feature selection method.
+
+Comparing the models built with different values of lambda, we find that Mean Squared Error on the test set decreases with increasing values of lambda whereas the error of the training set increases. The same reasoning follows here of how L1 regularization fights over-fitting by, thereby finding a balance between reproducing the training data and generalizing to data that it has not been trained on.
+
+For the bias-variance trade-off, we observed a similar behavior of decreasing bias and increasing variance to that observed in Ridge. Again, it takes the variance higher complexity values to become evident.
+
+Finally, the cross-validation analysis shows that the Lasso regression model, again, gives a lower estimate of the MSE than OLS at all values of lambda and both number of folds. Moreover, similar to the case with OLS and Ridge, again, cross-validation gives a lower estimate of the error compared to bootstrap.
+
 
 \subsection{Introducing real terrain data}
 \begin{figure}
@@ -203,8 +227,15 @@ It is also important to note that the bootstrap approach is closer to the real s
 \caption{2D and 3D plot of the terrain data used as basis for our analysis}
 \end{figure}
 
-
-
 \subsection{Regression techniques on terrain data}
+
+\medskip
+
+\begin{thebibliography}{9}
+\bibitem{hasties}
+Trevor Hastie, Robert Tibshirani and Jerome Friedman
+\textit{The Elements of Statistical Learning}
+Springer, Stanford, California, 2020
+\end{thebibliography}
 \end{document}
 
