@@ -50,7 +50,6 @@ and $\beta$ are in fact the unknown parameters in the linear regression problems
 1 & x_{n-1}^{1} & x_{n-1}^{2} & \dots & x_{n-1}^{n-1} \\ 
 \end{bmatrix}
 \end{equation}
-
 With the design matrix defined as (\ref{designM}), we can use this together with the unknown $\beta$ to approximate $y$ as
 \begin{equation}
 \textbf{\~{y}} = \textbf{X}\beta
@@ -63,21 +62,39 @@ We see that
 We therefore need to find $\beta$ values such that the error $\epsilon$ is minimized, which indeed is the true objective of linear regression.
 
 \subsection{Ordinary Least Squares}
-The ordinary least square method is defined by the following cost function
-\begin{equation}\label{costfunctionOLS}
+The ordinary least square (OLS) method is defined by the following cost function [Hjort-Jensen]
+\begin{align}\label{costfunctionOLS}
 C(\textbf{X},\beta) = \dfrac{1}{n} \{( \textbf{y}-\textbf{X}\beta^{T}\textbf{y}-\textbf{X}\beta)\}
-\end{equation}
-The function will not be derived here, but it is in fact a estimation of the parameters $\beta$ by minimizing the sum of the squared residuals. The minimization problem of the cost function (\ref{costfunctionOLS}) is solved by derivation of the function. The derivatives of (\ref{costfunctionOLS}) gives the parameterization of $\beta$ as
-\begin{equation}
+\end{align}
+The function will not be derived here, but it is in fact a estimation of the parameters $\beta$ by minimizing the sum of the squared residuals. The minimization problem of the cost function (\ref{costfunctionOLS}) is solved by derivation of the function. The derivatives of (\ref{costfunctionOLS}) gives the parameterization of $\beta$ for the OLS method as
+\begin{equation}\label{betaOLS}
 \beta = (\textbf{X}^{T}\textbf{X})^{-1}\textbf{X}^{T}\textbf{y}
-\end{equation} 
+\end{equation}
+We see from (\ref{betaOLS}) that finding an approximation for $\beta$ involves a matrix inversion. In cases where $\textbf{X}^{T}\textbf{X}$ is singular, it is non-invertible, and the parameterization of $\beta$ in (\ref{betaOLS}) can not be calculated. In these cases, the \textit{Singular Value Decomposition} (SVD) is to be used. The SVD decompose any matrix \textbf{X} with dimension $P \times n$ into terms of a diagonal matrix and two orthogonal matrices, leading to the expression (Hastie et al.)
+\begin{equation}
+\textbf{X} = \textbf{U} \textbf{D} \textbf{V}^{T}
+\end{equation}
+Here $\textbf{U}^{N \times p}$ and $\textbf{V}^{p \times p}$ are orthogonal matrices, with the columns of \textbf{U} spanning the column space of \textbf{X}, and the columns of \textbf{X} spanning the row space. $\textbf{D}^{p \times p}$ is a diagonal matrix.
+
+\subsection{Bias-Variance Tradeoff}
+\begin{align}\label{costfunctionOLS}
+C(\textbf{X},\beta) &= \frac{1}{n} \sum_{i=0}^{n-1} (y_{i} - \tilde{y}_{i})^{2} = \textit{E} [(\textbf{y} - \widetilde{\textbf{y}})^{2}]\\
+&= \dfrac{1}{n} \{( \textbf{y}-\textbf{X}\beta^{T}\textbf{y}-\textbf{X}\beta)\}
+\end{align}
 \subsection{Ridge Regression}
+Ridge regression is a method for shrinking the regression coefficients by imposing a penalty on their size. The Ridge coefficients minimize a penalized residual sum of squares. This circumvent the problem with colinearity we saw for the OLS method, where $\textbf{X}^{T}\textbf{X}$ might be singular. This is especially true for higher dimensions of the design matrix. By adding a penalty factor $\lambda$ to the diagonal of $\textbf{X}^{T}\textbf{X}$, the term is always invertible. The cost function for ridge regression can be expressed as
 \begin{equation}
 C(\textbf{X},\beta) = \dfrac{1}{n} \{( \textbf{y}-\textbf{X}\beta^{T}\textbf{y}-\textbf{X}\beta)\} + \lambda \beta^{T} \beta 
 \end{equation}
+and the parameterization for the ridge method thus become
+\begin{equation}
+\beta = (\textbf{X}^{T}\textbf{X} + \lambda\textbf{I})^{-1}\textbf{X}^{T}\textbf{y}
+\end{equation}
+We see that a diagonal matrix including the penalty factor $\lambda$ is added to $\textbf{X}^{T}\textbf{X}$. 
 \subsection{Lasso Regression}
+As for Ridge regression, Lasso is also a shrinkage method. Lasso stands for "Least Absolute Shrinkage and Selection Operator", and like Ridge, it fits the linear regression model by minimizing the sum of the squares augmented with a penalty factor. However, in Lasso regression, the penalty function becomes non-linear. In contrast to the Ridge regression, it is in fact the absolute values of the regression parameters multiplied by the penalty factor $\lambda$ [Wieringen].
 \subsection{The bootstrap}
-The boostrap resampling method is a simple Monte Carlo technique to approximate the sampling distribution (KILDE). The method randomly draw $B$ datasets with replacement from the training data, where each sample is the same size as the original training set. The model is then refit to the $B$ bootstrap datasets. In the context of this project, we use this method to calculate MSE, bias and variance of the model.
+The boostrap resampling method is a simple Monte Carlo technique to approximate the sampling distribution (KILDE). The method randomly draw $B$ datasets with replacement from the training data, where each sample is the same size as the original training set. The model is then refit to the $B$ bootstrap datasets \cite{1}. In the context of this project, we use this method to calculate MSE, bias and variance of the model.
 \subsection{k-fold Cross Validation}
 The $k$-fold Cross Validation technique is a resampling procedure used to evaluate the performance of statistical models on a limited data sample. The method generally results in a less biased or less optimistic estimate of the model compared to other methods, such as the train/test split. The \textit{k} refers to the equally number of groups the given sample shall be split into. One of these groups are set aside as the validation group. The rest of the groups, i.e. $K-1$, are used to fit the model, and calculate the prediction error of the fitted model when predicting the $k$th part of the data. A normal value for $k$ is $K=5$, as this gives a lower variance. It might, however, give problems with the bias if the training sets becomes too small.
 
@@ -231,11 +248,28 @@ Finally, the cross-validation analysis shows that the Lasso regression model, ag
 
 \medskip
 
-\begin{thebibliography}{9}
+\begin{thebibliography}{3}
 \bibitem{hasties}
 Trevor Hastie, Robert Tibshirani and Jerome Friedman
 \textit{The Elements of Statistical Learning}
 Springer, Stanford, California, 2020
+
+\bibitem{murphy}
+Kevin P. Murphy
+\textit{Machine Learning - A Probabilistic Perspective}
+The MIT Press, Cambridge, Massachusetts, 2012
+
+\bibitem{hjort}
+Morten Hjort-Jensen: Linear Regression and Review of Statistical Analysis and Probability Theory 
+\\\texttt{https://compphysics.github.io/MachineLearning/doc/pub/week35/html/week35.html}
+2020
+
+\bibitem{wessel}
+Wessel N. van Wieringen: Lecture notes on ridge regression
+\\\texttt{https://arxiv.org/pdf/1509.09169.pdf}
+2020
+
 \end{thebibliography}
+
 \end{document}
 
