@@ -166,7 +166,7 @@ $$\textbf{X} = \begin{bmatrix}
 \end{bmatrix}$$
 \section{Results}
 \subsection{Ordinary least squares on the Franke Function}
-In this part, we performed the plain OLS regression on the data that is generated using the Franke function. Before that, we split the data into training set, on which the model is trained, and a testing sets, on which the model’s performance is evaluated for the goodness of the fit. The ratio of training to testing sets 70/30.
+In this part, we performed the plain OLS regression on the data that is generated using the Franke function. Before that, we split the data into training set, on which the model is trained, and a testing sets, on which the model’s performance is evaluated for the goodness of the fit. The ratio of training to testing sets 70/30. The same train/test split was done in all the coming parts to ensure a fair and reproducible comparison between the different methods. This achieved by using the same random seed in all the cells.
 
 For performing the OLS, a polynomial of degree five was used to generate the features of the model, and then these features were scaled according to the training data statistics, in order to force the data into a distribution with zero mean and unit variance. This is useful because it ensures that each feature gets an equal chance of being represented in the polynomial, thus preventing features with large values to dominantly control the shape of the polynomial.
 
