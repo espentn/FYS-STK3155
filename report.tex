@@ -6,9 +6,14 @@
 \usepackage{blindtext}
 \usepackage{biblatex}
 \usepackage{graphicx}
-\title{Project 1}
+\title{Project 1 - Regression analysis and resampling methods}
 \author{Espen Ulset Nordsveen
 \and Ghadi Al Hajj}
+
+\DeclareRobustCommand{\bbone}{\text{\usefont{U}{bbold}{m}{n}1}}
+
+\DeclareMathOperator{\EX}{\mathbb{E}}
+
 \begin{document}
 \maketitle
 \section{Introduction}
@@ -61,26 +66,44 @@ We see that
 \end{align}
 We therefore need to find $\beta$ values such that the error $\epsilon$ is minimized, which indeed is the true objective of linear regression.
 
-\subsection{Ordinary Least Squares}
+\subsection{Ordinary Least Squares}\label{OLSsection}
 The ordinary least square (OLS) method is defined by the following cost function [Hjort-Jensen]
-\begin{align}\label{costfunctionOLS}
-C(\textbf{X},\beta) = \dfrac{1}{n} \{( \textbf{y}-\textbf{X}\beta^{T}\textbf{y}-\textbf{X}\beta)\}
-\end{align}
-The function will not be derived here, but it is in fact a estimation of the parameters $\beta$ by minimizing the sum of the squared residuals. The minimization problem of the cost function (\ref{costfunctionOLS}) is solved by derivation of the function. The derivatives of (\ref{costfunctionOLS}) gives the parameterization of $\beta$ for the OLS method as
+\begin{equation}\label{costfunctionOLS}
+C(\beta) = \frac{1}{n} \sum_{i=0}^{n-1} (y_{i} - \tilde{y}_{i})^{2} = \frac{1}{n} \{ (\textbf{y} - \tilde{y})^{T} (\textbf{y} - \tilde{y} \}
+\end{equation}
+In matrix-vector notation, this becomes
+\begin{equation}\label{costfunctionOLS2}
+C(\beta)= \dfrac{1}{n} \{( \textbf{y}-\textbf{X}\beta^{T}\textbf{y}-\textbf{X}\beta)\}
+\end{equation}
+By minimizing this cost function, this is in fact a estimation of the parameters $\beta$ by minimizing the sum of the squared residuals. The minimization problem of the cost function (\ref{costfunctionOLS2}) is solved by derivation of the function. The derivatives of (\ref{costfunctionOLS2}) gives the parameterization of $\beta$ for the OLS method as
 \begin{equation}\label{betaOLS}
 \beta = (\textbf{X}^{T}\textbf{X})^{-1}\textbf{X}^{T}\textbf{y}
 \end{equation}
-We see from (\ref{betaOLS}) that finding an approximation for $\beta$ involves a matrix inversion. In cases where $\textbf{X}^{T}\textbf{X}$ is singular, it is non-invertible, and the parameterization of $\beta$ in (\ref{betaOLS}) can not be calculated. In these cases, the \textit{Singular Value Decomposition} (SVD) is to be used. The SVD decompose any matrix \textbf{X} with dimension $P \times n$ into terms of a diagonal matrix and two orthogonal matrices, leading to the expression (Hastie et al.)
+We see from (\ref{betaOLS}) that finding an approximation for $\beta$ involves a matrix inversion. In cases where $\textbf{X}^{T}\textbf{X}$ is singular, it is non-invertible, and the parameterization of $\beta$ in (\ref{betaOLS}) can not be calculated. In these cases, the \textit{Singular Value Decomposition} (SVD) can be used. The SVD decompose any matrix \textbf{X} with dimension $P \times n$ into terms of a diagonal matrix and two orthogonal matrices, leading to the expression [Hastie et al.]
 \begin{equation}
 \textbf{X} = \textbf{U} \textbf{D} \textbf{V}^{T}
 \end{equation}
 Here $\textbf{U}^{N \times p}$ and $\textbf{V}^{p \times p}$ are orthogonal matrices, with the columns of \textbf{U} spanning the column space of \textbf{X}, and the columns of \textbf{X} spanning the row space. $\textbf{D}^{p \times p}$ is a diagonal matrix.
 
 \subsection{Bias-Variance Tradeoff}
-\begin{align}\label{costfunctionOLS}
-C(\textbf{X},\beta) &= \frac{1}{n} \sum_{i=0}^{n-1} (y_{i} - \tilde{y}_{i})^{2} = \textit{E} [(\textbf{y} - \widetilde{\textbf{y}})^{2}]\\
-&= \dfrac{1}{n} \{( \textbf{y}-\textbf{X}\beta^{T}\textbf{y}-\textbf{X}\beta)\}
-\end{align}
+For continuous predictions, we can assume that the true data is generated from a noisy model as [Hjort-Jensen]
+\begin{equation}
+y = f(x) + \epsilon
+\end{equation}
+where $\epsilon$ is normally distributed with mean zero and standard deviation $\sigma^{2}$. We saw from the OLS method in section \ref{OLSsection} that $f$ can be approximated in terms of $\beta$ and the design matrix $\textbf{X}$ as $\tilde{\textbf{y}} = \textbf{X} \beta$. We then found the parameters $\beta$ by minimizing the cost function
+\begin{equation}\label{biastradeoff}
+C(\textbf{X},\beta) = \frac{1}{n} \sum_{i=0}^{n-1} (y_{i} - \tilde{y}_{i})^{2} = \EX [(\textbf{y} - \widetilde{\textbf{y}})^{2}]
+\end{equation}
+This can be rewritten as
+\begin{align*}\label{biastradeoff}
+C(\textbf{X},\beta) &= \EX [(\textbf{y} - \widetilde{\textbf{y}})^{2}]\\
+&= \dfrac{1}{n} \{( \textbf{y}-\textbf{X}\beta^{T}\textbf{y}-\textbf{X}\beta)\} \\
+&= \EX [(f + \epsilon - \tilde{\textbf{y}})^{2}] \\
+&= \EX [(f + \epsilon - \tilde{\textbf{y}} + \EX[\tilde{\textbf{y}}] - \EX[\tilde{\textbf{y}}])^{2}]\\
+&= \EX [(\textbf{y} - \EX [\tilde{\textbf{y}}])^{2} + Var[\tilde{\textbf{y}}] + \epsilon^{2} \\
+&= \frac{1}{n} \sum (f_{i} - \EX[\tilde{\textbf{y}}])^{2} + \frac{1}{n} \sum (\tilde{\textbf{y}} - \EX[\tilde{\textbf{y}}])^{2} + \epsilon^{2} \\
+&= \frac{1}{n} \sum (f_{i} - \EX[\tilde{\textbf{y}}])^{2} + \frac{1}{n} \sum (\tilde{\textbf{y}} - \EX[\tilde{\textbf{y}}])^{2} + \sigma^{2}
+\end{align*}
 \subsection{Ridge Regression}
 Ridge regression is a method for shrinking the regression coefficients by imposing a penalty on their size. The Ridge coefficients minimize a penalized residual sum of squares. This circumvent the problem with colinearity we saw for the OLS method, where $\textbf{X}^{T}\textbf{X}$ might be singular. This is especially true for higher dimensions of the design matrix. By adding a penalty factor $\lambda$ to the diagonal of $\textbf{X}^{T}\textbf{X}$, the term is always invertible. The cost function for ridge regression can be expressed as
 \begin{equation}
@@ -93,7 +116,7 @@ and the parameterization for the ridge method thus become
 We see that a diagonal matrix including the penalty factor $\lambda$ is added to $\textbf{X}^{T}\textbf{X}$. 
 \subsection{Lasso Regression}
 As for Ridge regression, Lasso is also a shrinkage method. Lasso stands for "Least Absolute Shrinkage and Selection Operator", and like Ridge, it fits the linear regression model by minimizing the sum of the squares augmented with a penalty factor. However, in Lasso regression, the penalty function becomes non-linear. In contrast to the Ridge regression, it is in fact the absolute values of the regression parameters multiplied by the penalty factor $\lambda$ [Wieringen].
-\subsection{The bootstrap}
+\subsection{The Bootstrap}
 The boostrap resampling method is a simple Monte Carlo technique to approximate the sampling distribution (KILDE). The method randomly draw $B$ datasets with replacement from the training data, where each sample is the same size as the original training set. The model is then refit to the $B$ bootstrap datasets \cite{1}. In the context of this project, we use this method to calculate MSE, bias and variance of the model.
 \subsection{k-fold Cross Validation}
 The $k$-fold Cross Validation technique is a resampling procedure used to evaluate the performance of statistical models on a limited data sample. The method generally results in a less biased or less optimistic estimate of the model compared to other methods, such as the train/test split. The \textit{k} refers to the equally number of groups the given sample shall be split into. One of these groups are set aside as the validation group. The rest of the groups, i.e. $K-1$, are used to fit the model, and calculate the prediction error of the fitted model when predicting the $k$th part of the data. A normal value for $k$ is $K=5$, as this gives a lower variance. It might, however, give problems with the bias if the training sets becomes too small.
@@ -112,6 +135,16 @@ The general procedure for the $k$-fold Cross Validation is as follows (KILDE)
 	
 \item Summarize the skill of the model using the sample of model evaluation scores
 \end{enumerate}
+
+\subsection{Error Metrics}
+\subsubsection{Mean Squared Error}
+\begin{equation}
+MSE = \frac{1}{n} \sum_{i=0}^{n}(y_{i} - \tilde{y}_{i})^{2}
+\end{equation}
+\subsubsection{$R2$-score}
+\begin{equation}
+R^{2} = 1-\frac{MSE}{MSE_{0}} = 1-\frac{\sum_{i=0}^{n}(y_{i} - \tilde{y}_{i})^{2}}{\sum_{i=0}^{n}(y_{i} - \bar{\textbf{y}}_{i})^{2}}
+\end{equation}
 
 \section{Data}
 \subsection{Franke's function}
