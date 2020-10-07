@@ -306,7 +306,11 @@ Comparing the models built with different values of $\lambda$, we find that Mean
 
 For the bias-variance trade-off, we observed a similar behavior of decreasing bias and increasing variance to that observed in Ridge. Again, it takes the variance higher complexity values to become evident.
 
-Finally, in figure \ref{Lassobootstrap} the cross-validation analysis shows that the Lasso regression model, again, gives a lower estimate of the MSE than OLS at all values of $\lambda$ and both number of folds. Moreover, similar to the case with OLS and Ridge, again, cross-validation gives a lower estimate of the error compared to bootstrap.
+Moreover, in figure \ref{Lassobootstrap} the cross-validation analysis shows that the Lasso regression model, again, gives a lower estimate of the MSE than OLS at all values of $\lambda$ and both number of folds. Moreover, similar to the case with OLS and Ridge, again, cross-validation gives a lower estimate of the error compared to bootstrap, thereby giving more optimistic results.
+
+Finally, given all the previous analyses, and based on the results from the bootstrap resampling method since it studies the behaviour of the regression method at different polynomial degrees, it can be seen the the polynomial degree 3 gives the best results among all the used methods. Moreover, Ridge regression gives the least MSE value of 0.8269 at that polynomial degree with $\lambda = 10$. Therefore this is selected as the best model.
+
+For such an input surface, this result is reasonable since Ridge finds a perfect spot between the other two methods. Indeed, it adapts to data trends, similar to what OLS does, but at the same time, it takes the generalization of the model into consideration by penalizing large values of $\beta$, therby not learning the noise in the training data, though in a less extreme fassion than Lasso.
 \begin{figure}[h]\centering
 \subfloat[$\lambda=0.0001$]{\label{a}\includegraphics[width=.45\linewidth]{boostraplasso0_cut.png}}\hfill
 \subfloat[$\lambda=0.0046$]{\label{b}\includegraphics[width=.45\linewidth]{boostraplasso1_cut.png}} \par
@@ -334,8 +338,16 @@ Looking beyond the Franke functions from now, and looking into real data, the pr
 
 \clearpage
 \subsection{Regression techniques on terrain data}
-In this part, we applied all of the three discussed methods on the terrain data. In order to get a general sense of each method's approach in reproducing the terrain data, we used all of the cropped image to train a model of each type. All of the data was used because splitting the data and plotting the results of the training data would not be possible as the \verb+sklearn.model_selection.train_test_split+ function does not return the indices of the training data. The results of the analysis is shown in table ??
-Both OLS, Ridge and Lasso regression methods with resampling was tested on the terrain data shown in figure \ref{terraindata}. The result can be seen in figure \ref{fig:realDataPlot}
+In this part, we applied all of the three discussed methods on the terrain data. In order to get a general sense of each method's approach in reproducing the terrain data, we used all of the cropped image to train a model of each type. All of the data was used because splitting the data and plotting the results of the training data would not be possible as the \verb+sklearn.model_selection.train_test_split+ function does not return the indices of the training data to be used in the plots.
+
+The cropped region from figure \ref{terraindata} is shown in figure \ref{fig:realDataPlot}, entitled as "True Function". The learnt surfaces of all three methods trained on that region are shown corresponsingly in the same figure. For reasons to be discussed later in this part, we chose the degree 25 as our polynomial degree in building the design matrix.
+
+In order to select the best model, we performed the 10-fold cross validation analysis on the terrain data using the three models at different model complexities, and different $\lambda$ values for regularization in Ridge and Lasso regression. The results are shown in table (add table here). 
+
+This simulation shows that, for sensible reasons, low degree polynomials fail at learning, and thus reproducing, such a terrain with a large number of bends and spikes. Moreover, at all of the used polynomial degrees, OLS regression gives the best results among the used methods, as indicated by the low MSE values. The reason for that is, as already discussed, both Ridge and Lasso put penalities on large values of $\beta$, thereby smoothing the resulting curve. This is clearly visible in figure \ref{fig:realDataPlot}. Therefor, since the data is very noisy, learning a smooth function will not yield the best results, as such a function does not adapt to this noise.
+
+Before selecting OLS as our final model, we performed simple search over higher polynomial degrees using OLS only, as it has shown the most promising results. and in order to avoid lengthy computation times required by the other methods at such high degrees. The table (add another table) shows that as we increase the degree from 25 to 55 in steps of 10, we observe a minimal decrease in the MSE, with a comparably higher increase in computation time. For the reasons discussed above, we chose OLS regression at degree 25 as our final model for this study.
+
 \begin{figure}[h]\centering
 \includegraphics[scale=0.4]{Plots/PlotsRealData.png}
 \caption{Prediction for terrain data}
