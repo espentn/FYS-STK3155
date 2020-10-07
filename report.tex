@@ -139,26 +139,40 @@ The general procedure for the $k$-fold Cross Validation is as follows (KILDE)
 \item Summarize the skill of the model using the sample of model evaluation scores
 \end{enumerate}
 
-\subsection{Error Metrics}
+\subsection{Model analysis}
+To evaluate how well the predicted model fits the real data, we need to define some measures to be evaluated
 \subsubsection{Mean Squared Error}
-\begin{equation}
+The mean squared error (MSE) of an estimator is the averaged squared difference between the estimated values and the actual value. That is, the difference between the predicted data points $\tilde{\textbf{y}}$ and their actual value $\textbf{y}$, and is defined by
+\begin{equation}\label{MSE}
 MSE = \frac{1}{n} \sum_{i=0}^{n}(y_{i} - \tilde{y}_{i})^{2}
 \end{equation}
+MSE values close to zero thus indicates a pretty good estimate for the model.
 \subsubsection{$R2$-score}
-\begin{equation}
-R^{2} = 1-\frac{MSE}{MSE_{0}} = 1-\frac{\sum_{i=0}^{n}(y_{i} - \tilde{y}_{i})^{2}}{\sum_{i=0}^{n}(y_{i} - \bar{\textbf{y}}_{i})^{2}}
+The R2 value, or the \textit{coefficient of determination}, measures how well future values are likely to be predicted by the model. It is a relationship between the variance of the predicted model and the total variance of the input data, and is defined by
+\begin{equation}\label{R2score}
+R^{2} = 1-\frac{\sum_{i=0}^{n}(y_{i} - \tilde{y}_{i})^{2}}{\sum_{i=0}^{n}(y_{i} - \bar{\textbf{y}}_{i})^{2}}
 \end{equation}
-
+where $\overline{y}$ is defined as
+\begin{equation}
+\overline{y} = \dfrac{1}{n} \sum_{i=0}^{n-1} y_{i}
+\end{equation}
+The $R^{2}$ score might be positive or negative. A score of 1 is the best possible score, and indicates that the predictions perfectly fits the data. A constant model that always predicts the expected value of $\tilde{y}$ without caring for the input data, get a $R^{2}$ score of 0.
+\subsection{Confidence interval}
+The confidence interval gives an estimate of how well $\beta$ is predicted. The $95\%$ confidence interval for $\beta_{j}$ can be defined as [Hastie et al.]
+\begin{equation}
+c_{\beta_{j}} = \beta_{j} \pm 1.645 \sigma
+\end{equation}
+It gives an confidence level that the true parameter is in the proposed range. 
 \section{Data}
 \subsection{Franke's function}
-The Franke's function will be used as a basis for our discussion of the various regression and resampling methods in this context. This is a function  widely used as a test function in interpolation problems.
+The Franke's function will be used as a basis for our discussion of the various regression and resampling methods in this context. This is a function  widely used as a test function in interpolation problems, and is defined by
 
 \begin{align*}
 f(x,y) &= \frac{3}{4}exp\left(-\frac{(9x-2)^2}{4} - \frac{(9y-2)^2}{4}\right)+\frac{3}{4}exp\left(-\frac{(9x+1)^2}{49} - \frac{(9y+1)}{10}\right)\\
 &+ \frac{1}{2}exp\left(-\frac{(9x-7)^2}{4} - \frac{(9y-3)^2}{4}\right)-\frac{1}{5}exp\left(-(9x-4)^2 - (9y-7)^2\right)
 \end{align*}
 \section{Method}
-The Franke function is a multivariable function, depending on both $x$ and $y$, and hence is a 2-variable polynomial. The design matrix in \ref{designM} thus needs to be adjusted for this multivariable case. The 
+The Franke function is a multivariable function, depending on both $x$ and $y$, and hence is a 2-variable polynomial. The design matrix in (\ref{designM}) thus needs to be adjusted for this multivariable case. The design matrix thus becomes  
 $$\textbf{X} = \begin{bmatrix}
 1 & x_{0} & y_{0} & x_{0}y_{0} & \dots & x_{0}^{N} & y_{0}^{N}     \\
 1 & x_{0} & y_{1} & x_{0}y_{1} & \dots & x_{0}^{N} & y_{1}^{N}  \\
@@ -167,6 +181,8 @@ $$\textbf{X} = \begin{bmatrix}
 \vdots & \vdots & \vdots & \vdots & \dots & \vdots & \vdots \\
 1 & x_{n-1} & y_{m-1} & x_{n-1}y_{m-1} & \dots & x_{n-1}^{N} & y_{m-1}^{N} \\
 \end{bmatrix}$$
+where $N$ is the polynomial degree.
+
 \section{Results}
 \subsection{Ordinary least squares on the Franke Function}
 In this part, we performed the plain OLS regression on the data that is generated using the Franke function. Before that, we split the data into training set, on which the model is trained, and a testing sets, on which the model’s performance is evaluated for the goodness of the fit. The ratio of training to testing sets 70/30. The same train/test split was done in all the coming parts to ensure a fair and reproducible comparison between the different methods. This achieved by using the same random seed in all the cells.
@@ -178,27 +194,13 @@ In this part, we performed the plain OLS regression on the data that is generate
 
 For performing the OLS, a polynomial of degree five was used to generate the features of the model, and then these features were scaled according to the training data statistics, in order to force the data into a distribution with zero mean and unit variance. This is useful because it ensures that each feature gets an equal chance of being represented in the polynomial, thus preventing features with large values to dominantly control the shape of the polynomial.
 
-The metrics were then applied to both sets and the R2 coefficient and the Mean Square Error of each set were calculated. In addition, we generated a plot of the confidence intervals of the tunable parameters, shown in figure \ref{fig:confintOLS}.
-
-The Mean Square error was calculated by
-\begin{equation}\label{mse}
-MSE(y,\tilde{y}) = \dfrac{1}{n}\sum_{i=0}^{n-1} (y_{i} - \tilde{y}_{i})^{2}
-\end{equation}
-and the R2 coefficient was calculated by
-\begin{equation}\label{r2}
-R^{2}(y,\tilde{y}) = 1 - \dfrac{\sum_{i=0}^{n-1} (y_{i} - \tilde{y}_{i})^{2}}{\sum_{i=0}^{n-1} (y_{i} - \overline{y}_{i})^{2}}
-\end{equation}
-where $\overline{y}$ is defined as
-\begin{equation}
-\overline{y} = \dfrac{1}{n} \sum_{i=0}^{n-1} y_{i}
-\end{equation}
+The metrics were then applied to both sets and the R2 coefficient and the Mean Square Error of each set were calculated. In addition, we generated a plot of the confidence intervals of the tunable parameters, shown in figure \ref{fig:confintOLS}. The Mean Square error was calculated by (\ref{MSE}) and the R2 coefficient was calculated by (\ref{R2score}).
 \begin{figure}
 \includegraphics[scale=0.5]{confidenceintervall.png}
 \centering
 \caption{Confidence intervall of the tunable paramteres}
 \label{fig:confintOLS}
 \end{figure}
-
 In our demonstration, we noticed that if the design matrix is created from data points within the range of [0,1], then the resulting  matrix would be close to singularity, and the program would thus raise an error whenever the inverse is calculated, particularly when calculating  or its variance. This, in turn, caused the problem of getting negative values for the variance of some values. Using pinv, however, instead of inv, solved both problems when calculating the inverses.
 
 It is also worth mentioning that when the range of values that the raw features can take is increased to, say, [0,5], instead of [0,1], the problem of singular matrices immediately disappears even when using inv and the determinant of the matrix  becomes greater than zero.
