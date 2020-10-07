@@ -325,6 +325,7 @@ Looking beyond the Franke functions from now, and looking into real data, the pr
 
 \clearpage
 \subsection{Regression techniques on terrain data}
+In this part, we applied all of the three discussed methods on the terrain data. In order to get a general sense of each method's approach in reproducing the terrain data, we used all of the cropped image to train a model of each type. All of the data was used because splitting the data and plotting the results of the training data would not be possible as the \verb+sklearn.model_selection.train_test_split+ function does not return the indices of the training data. The results of the analysis is shown in table ??
 Both OLS, Ridge and Lasso regression methods with resampling was tested on the terrain data shown in figure \ref{terraindata}. The result can be seen in figure \ref{fig:realDataPlot}
 \begin{figure}[h]\centering
 \includegraphics[scale=0.4]{Plots/PlotsRealData.png}
