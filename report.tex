@@ -84,7 +84,7 @@ We see from (\ref{betaOLS}) that finding an approximation for $\beta$ involves a
 \begin{equation}
 \textbf{X} = \textbf{U} \textbf{D} \textbf{V}^{T}
 \end{equation}
-Here $\textbf{U}^{N \times p}$ and $\textbf{V}^{p \times p}$ are orthogonal matrices, with the columns of \textbf{U} spanning the column space of \textbf{X}, and the columns of \textbf{X} spanning the row space. $\textbf{D}^{p \times p}$ is a diagonal matrix.
+Here $\textbf{U}^{N \times p}$ and $\textbf{V}^{p \times p}$ are orthogonal matrices, with the columns of \textbf{U} spanning the column space of \textbf{X}, and the columns of \textbf{X} spanning the row space. $\textbf{D}^{p \times p}$ is a diagonal matrix. In this study, SVD was used wherever the resulting matrices were non-invertible using the \verb+np.pinv()+ function from the \verb+numpy+ library.
 
 \subsection{Bias-Variance Tradeoff}
 For continuous predictions, we can assume that the true data is generated from a noisy model as [Hjort-Jensen]
@@ -101,7 +101,7 @@ C(\textbf{X},\beta) &= \EX [(\textbf{y} - \widetilde{\textbf{y}})^{2}]\\
 &= \dfrac{1}{n} \{( \textbf{y}-\textbf{X}\beta^{T}\textbf{y}-\textbf{X}\beta)\} \\
 &= \EX [(f + \epsilon - \tilde{\textbf{y}})^{2}] \\
 &= \EX [(f + \epsilon - \tilde{\textbf{y}} + \EX[\tilde{\textbf{y}}] - \EX[\tilde{\textbf{y}}])^{2}]\\
-&= \EX [(\textbf{y} - \EX [\tilde{\textbf{y}}])^{2} + Var[\tilde{\textbf{y}}] + \epsilon^{2} \\
+&= \EX [(\textbf{y} - \EX [\tilde{\textbf{y}}])^{2} + Var[\tilde{\textbf{y}}] + Var[\epsilon^{2}] \\
 &= \frac{1}{n} \sum (f_{i} - \EX[\tilde{\textbf{y}}])^{2} + \frac{1}{n} \sum (\tilde{\textbf{y}} - \EX[\tilde{\textbf{y}}])^{2} + \epsilon^{2} \\
 &= \frac{1}{n} \sum (f_{i} - \EX[\tilde{\textbf{y}}])^{2} + \frac{1}{n} \sum (\tilde{\textbf{y}} - \EX[\tilde{\textbf{y}}])^{2} + \sigma^{2}
 \end{align*}
@@ -185,7 +185,7 @@ where $N$ is the polynomial degree.
 
 \section{Results}
 \subsection{Ordinary least squares on the Franke Function}
-In this part, we performed the plain OLS regression on the data that is generated using the Franke function. Before that, we split the data into training set, on which the model is trained, and a testing sets, on which the model’s performance is evaluated for the goodness of the fit. The ratio of training to testing sets 70/30. The same train/test split was done in all the coming parts to ensure a fair and reproducible comparison between the different methods. This achieved by using the same random seed in all the cells.
+In this part, we performed the plain OLS regression on the data that is generated using the Franke function. Before that, we split the data into training set, on which the model is trained, and a testing sets, on which the model’s performance is evaluated for the goodness of the fit. The ratio of training to testing sets 70/30. The same train/test split was done in all the coming parts to ensure a fair and reproducible comparison between the different methods. This was achieved by using the same random seed in all the cells.
 
 \begin{figure}[h]
 \includegraphics[scale=0.35]{frankePlots.png}
@@ -272,7 +272,7 @@ Next, we applied the bootstrapping method to ridge regression to compare it with
 \caption{Plots of the relationships between error, bias and variance using Ridge bootstrapping}
 \label{Ridgebootstrap}
 \end{figure}
-Moving into cross-validation, the ridge regression model gives a lower estimate of the MSE than OLS at all values of $\lambda$ and both number of folds, except at  with five folds. Moreover, similar to the case with OLS, again, cross-validation gives a lower estimate of the error compared to bootstrap.
+Moving into cross-validation, the ridge regression model gives a lower estimate of the MSE than OLS at all values of $\lambda$ and both number of folds, except at $\lambda = 10^{-1}$ with five folds. Moreover, similar to the case with OLS, again, cross-validation gives a lower estimate of the error compared to bootstrap.
 
 \clearpage
 \subsection{Lasso regression}
@@ -285,7 +285,8 @@ Complementing our study of OLS and Ridge regression, here, we present a similar 
 \caption{Plots of the confidence intervall for the lasso regression on the Franke function}
 \label{LassoConfInt}
 \end{figure}
-Similar to Ridge regression, as the value of $\lambda$ increases the parameters beta and their confidence intervals become more centered around zero, for the same reason. However, the true difference between Lasso and Ridge is that instead of just centering the values of beta around zero, thereby, preventing them from attaining large values, Lasso takes a step further and actually set some parameters to exactly zero. This behavior is more evident at high values of $\lambda$. In this way, Lasso can be seen as a shrinkage and feature selection method.
+Similar to Ridge regression, as the value of $\lambda$ increases the parameters beta become more centered around zero, for the same reason of being penalized for having large values. However, the true difference between Lasso and Ridge is that instead of just centering the values of beta around zero, thereby, preventing them from attaining large values, Lasso takes a step further and actually set some parameters to exactly zero. This behavior is more evident at high values of $\lambda$. In this way, Lasso can be seen as a shrinkage and feature selection method.
+Here, it is important to note that the confidence intervals were not calculated as there is no analytical equation for this quantity. Instead, only the values of the obtained $\beta$'s are displayed.
 \begin{figure}[h]
 \includegraphics[scale=0.5]{Plots/lassoRegressionModelplot.png}
 \centering
