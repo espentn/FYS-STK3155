@@ -1,0 +1,43 @@
+\documentclass[12pt]{article}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+
+
+
+
+\begin{document}
+
+\begin{equation}
+\begin{aligned}
+	\mathbb{E}[ (y - \tilde y)^2 ] &= \mathbb{E}[(y - \mathbb{E}[\tilde y] + \mathbb{E}[\tilde y] - \tilde y )^2]
+	\\
+	& = \mathbb{E}[(y - \mathbb{E}[\tilde y])^2] + \mathbb{E}[(\mathbb{E}[\tilde y] - \tilde y)^2] + 2 \mathbb{E}[(\mathbb{E}[\tilde y] - \tilde y)(y - \mathbb{E}[\tilde y])]
+	\\
+%	\text{However, this the third term is equal to:}
+	\\
+\mathbb{E}[(\mathbb{E}[\tilde y] - \tilde y)(y - \mathbb{E}[\tilde y])] & = \mathbb{E}[\mathbb{E}[\tilde y]y - \mathbb{E}[\tilde y]^2 - \tilde y y + \tilde y \mathbb{E}[\tilde y]]
+\\
+& = ( \mathbb{E}[\tilde y]^2 - \mathbb{E}[\tilde y]^2 - \mathbb{E}[\tilde y] \mathbb{E}[\tilde y] + \mathbb{E}[\tilde y] \mathbb{E}[\tilde y] )
+\\
+	& =0
+	\\
+	\\
+\mathbb{E}[ (y - \tilde y)^2 ]	& = 	\mathbb{E}[(f + \epsilon - \mathbb{E}[\tilde y])^2] + \mathbb{E}[(\tilde y - \mathbb{E}[\tilde y])^2]
+	\\
+	& = \mathbb{E}[f - \mathbb{E}[\tilde y])^2] + \mathbb{E}[\epsilon^2] + 2 \mathbb{E}[(\epsilon) (f - \mathbb{E}[\tilde y])^2)] + \mathbb{E}[(\tilde y -\mathbb{E}[\tilde y])^2]
+	\\
+	\\
+\mathbb{E}[(\epsilon) (f - \mathbb{E}[\tilde y])^2)]	
+	& = \mathbb{E}[(\epsilon)] \ \mathbb{E}[(f - \mathbb{E}[\tilde y])^2)]
+	\\
+	& = 0
+	\\
+	\\	
+\mathbb{E}[ (y - \tilde y)^2 ]		& = \mathbb{E}[f - \mathbb{E}[\tilde y])^2] + \mathbb{E}[\epsilon^2] + \mathbb{E}[(\tilde y -\mathbb{E}[\tilde y])^2]
+\\
+& = Bias^2 + \sigma^2_\epsilon + Variance 
+\end{aligned}
+\end{equation}
+
+
+\end{document}
