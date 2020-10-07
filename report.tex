@@ -98,14 +98,23 @@ C(\textbf{X},\beta) = \frac{1}{n} \sum_{i=0}^{n-1} (y_{i} - \tilde{y}_{i})^{2} =
 This can be rewritten as
 \begin{align*}\label{biastradeoff}
 C(\textbf{X},\beta) &= \EX [(\textbf{y} - \widetilde{\textbf{y}})^{2}]\\
-&= \dfrac{1}{n} \{( \textbf{y}-\textbf{X}\beta^{T}\textbf{y}-\textbf{X}\beta)\} \\
-&= \EX [(f + \epsilon - \tilde{\textbf{y}})^{2}] \\
-&= \EX [(f + \epsilon - \tilde{\textbf{y}} + \EX[\tilde{\textbf{y}}] - \EX[\tilde{\textbf{y}}])^{2}]\\
-&= \EX [(\textbf{y} - \EX [\tilde{\textbf{y}}])^{2} + Var[\tilde{\textbf{y}}] + Var[\epsilon^{2}] \\
-&= \frac{1}{n} \sum (f_{i} - \EX[\tilde{\textbf{y}}])^{2} + \frac{1}{n} \sum (\tilde{\textbf{y}} - \EX[\tilde{\textbf{y}}])^{2} + \epsilon^{2} \\
+&= \EX[(y - \EX[\tilde y] + \EX[\tilde y] - \tilde y )^2]\\
+	& = \EX[(y - \EX[\tilde y])^2] + \EX[(\EX[\tilde y] - \tilde y)^2] + 2 \EX[(\EX [\tilde y] - \tilde y)(y - \EX [\tilde y])]\\
+	& = \EX[(y - \EX[\tilde y])^2] + \EX[(\EX[\tilde y] - \tilde y)^2]
+	\\
+	& = 	\EX[(f + \epsilon - \EX[\tilde y])^2] + \EX[(\tilde y - \EX[\tilde y])^2]
+	\\
+	& = \EX[f - \EX[\tilde y])^2] + \EX[\epsilon^2] + 2 \EX[(\epsilon) (f - \EX[\tilde y])^2)] + \EX[(\tilde y -\EX[\tilde y])^2]
+	\\
+	& = \EX[f - \EX[\tilde y])^2] + \EX[\epsilon^2] + \EX[(\tilde y -\EX[\tilde y])^2]
+	\\
+	& = \EX[f - \EX[\tilde y])^2] + \EX[\epsilon^2] + \EX[(\tilde y -\EX[\tilde y])^2]
+\\
+& = Bias^2 + \sigma^2_\epsilon + Variance \\
 &= \frac{1}{n} \sum (f_{i} - \EX[\tilde{\textbf{y}}])^{2} + \frac{1}{n} \sum (\tilde{\textbf{y}} - \EX[\tilde{\textbf{y}}])^{2} + \sigma^{2}
 \end{align*}
 We see that the first part is the difference between the expected value of the model prediction and the true value of $y$, and is called the \textit{bias}. The value is used for evaluation of the predicted model. A bias of zero is called unbiased, and will thus not contain any systematic or random errors, which is fairly unlikely. The second part is the squared deviation of $y$ from its mean, which is called the {variance}. It basically describes the spread of the prediction.
+
 
 \subsection{Ridge Regression}
 Ridge regression is a method for shrinking the regression coefficients by imposing a penalty on their size. The Ridge coefficients minimize a penalized residual sum of squares. This circumvent the problem with colinearity we saw for the OLS method, where $\textbf{X}^{T}\textbf{X}$ might be singular. This is especially true for higher dimensions of the design matrix. By adding a penalty factor $\lambda$ to the diagonal of $\textbf{X}^{T}\textbf{X}$, the term is always invertible. The cost function for ridge regression can be expressed as
