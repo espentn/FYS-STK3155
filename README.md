@@ -7,3 +7,5 @@ The entire source code is given in the Jupyter Notebook on github. All cells in 
 
 The notebook is organised in parts similar to the project, and should as such be self explanatory.
 
+The report is found in the folder with the same name
+
