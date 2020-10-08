@@ -17,6 +17,10 @@
 
 \begin{document}
 \maketitle
+\begin{abstract}
+The Machine Learning field has seen great advancements in many scientific fields and many new algorithms are introduced each year. Linear Regression, with its three varieties, OLS, Ridge and Lasso, serves as the backbone of many advanced Machine Learning algorithms such as Logistic Regression, Neural Networks, etc. Therefore, studying this algorithm, with its simplicity compared to the other algorithms, is essential to build a robust foundation and understanding of the more advanced methods. In this project, we present an explanation of this method with applications on simple generated data and real terrain data, in order to compare the performance of the different varieties and present an analytical assessment of each. This was done with the help of re-sampling techniques, namely bootstrap and cross validation. We found that Ridge regression gave the best performance on the generated data, while OLS was superior on the terrain data. These results suggest that there is no single method that always performs the best in all cases, and that, indeed, each method would be more suitable in specific cases than the others.
+\end{abstract}
+
 \section{Introduction}
 Linear regression is an important tool within the field of statistics and data analysis. This statistical method aims to determine the strength and character of the relationship between one dependent variable, also called the outcome, and one or more independent variables, also called the features. This is achieved by mapping this relationship through a mathematical formula that best approximates the data points within a given data set.
 
@@ -129,13 +133,12 @@ We see that a diagonal matrix including the penalty factor $\lambda$ is added to
 \subsection{Lasso Regression}
 As for Ridge regression, Lasso is also a shrinkage method. Lasso stands for "Least Absolute Shrinkage and Selection Operator", and like Ridge, it fits the linear regression model by minimizing the sum of the squares augmented with a penalty factor. However, in Lasso regression, the penalty function becomes non-linear. In contrast to the Ridge regression, it is in fact the absolute values of the regression parameters multiplied by the penalty factor $\lambda$ [Wieringen]. There is no analytical expression for finding $\beta$, but is in fact done iteratively. 
 \subsection{The Bootstrap}
-The boostrap resampling method is a simple Monte Carlo technique to approximate the sampling distribution (KILDE). The method randomly draw $B$ datasets with replacement from the training data, where each sample is the same size as the original training set. The model is then refit to the $B$ bootstrap datasets \cite{Hastie et al.}. In the context of this project, we use this method to calculate MSE, bias and variance of the model.
+The boostrap resampling method is a simple Monte Carlo technique to approximate the sampling distribution [Murphy]. The method randomly draw $B$ datasets with replacement from the training data, where each sample is the same size as the original training set. The model is then refit to the $B$ bootstrap datasets \cite{Hastie et al.}. In the context of this project, we use this method to calculate MSE, bias and variance of the model.
 \subsection{\textit{k}-fold Cross Validation}
 The $k$-fold Cross Validation technique is a resampling procedure used to evaluate the performance of statistical models on a limited data sample. The method generally results in a less biased or less optimistic estimate of the model compared to other methods, such as the train/test split. The \textit{k} refers to the equally number of groups the given sample shall be split into. One of these groups are set aside as the validation group. The rest of the groups, i.e. $K-1$, are used to fit the model, and calculate the prediction error of the fitted model when predicting the $k$th part of the data. A normal value for $k$ is $K=5$, as this gives a lower variance. It might, however, give problems with the bias if the training sets becomes too small.
 
-The general procedure for the $k$-fold Cross Validation is as follows (KILDE)
+The general procedure for the $k$-fold Cross Validation is as follows
 \begin{enumerate}
-\item Shuffle the dataset
 \item Split the dataset into $k$ groups
 \item For each unique group
 \begin{enumerate}
@@ -144,9 +147,9 @@ The general procedure for the $k$-fold Cross Validation is as follows (KILDE)
 \item Fit a model on the training set and evaluate it on the test set
 \item Retain the evaluation score and discard the model
 \end{enumerate}
-	
 \item Summarize the skill of the model using the sample of model evaluation scores
 \end{enumerate}
+The value of $k$ is normally set to 5 or 10.
 
 \subsection{Model analysis}
 To evaluate how well the predicted model fits the real data, we need to define some measures to be evaluated
@@ -236,10 +239,9 @@ As the complexity increases, the bias starts decreasing indicating that the mode
 When the polynomial degree exceeds 5, the variance starts to increase in value indicating that the model has now entered into the realm of over-fitting. This variance will keep increasing as the complexity increases until the model has learned all the noise in the training data. This additional learning negatively impacts the model’s performance on new data and inhibits its ability to generalize to the domain of interest, which is the ultimate goal of any machine learning algorithm.
 
 \begin{figure}[h]\centering
-\subfloat[legend]{\label{a}\includegraphics[width=.45\linewidth]{partBplot10.png}}\hfill
-\subfloat[legend]{\label{b}\includegraphics[width=.45\linewidth]{partBplot40.png}} \par
-\subfloat[legend]{\label{c}\includegraphics[width=.45\linewidth]{partBplot70.png}}\hfill
-\subfloat[legend]{\label{c}\includegraphics[width=.45\linewidth]{partBplot100.png}}\par
+\subfloat[legend]{\label{a}\includegraphics[width=.45\linewidth]{Plots/partBplot10.jpg}}\hfill
+\subfloat[legend]{\label{b}\includegraphics[width=.45\linewidth]{Plots/partBplot20.jpg}} \par
+\subfloat[legend]{\label{c}\includegraphics[width=.45\linewidth]{Plots/partBplot30.jpg}}
 \caption{Plots of the relationships between error, bias and variance with bumber of bootstraps = 200, using the bias-variance tradeoff}
 \label{fig}
 \end{figure}
@@ -324,15 +326,8 @@ For such an input surface, this result is reasonable since Ridge finds a perfect
 \subsection{Introducing real terrain data}
 Looking beyond the Franke functions from now, and looking into real data, the previous methods will now be tested on terrain data. We use digital terrain data from Norway, see figure \ref{terraindata} for a visual presentation. 
 \begin{figure}[h]
-\begin{minipage}{0.48\textwidth}
-\centering
-\includegraphics[width=1.5\linewidth]{terrain2dplot.png}
-\end{minipage}
-\begin{minipage}{\textwidth}
-
-\includegraphics[width=0.7\linewidth]{rawdataplot.png}
-\end{minipage}
-\caption{2D and 3D plot of the terrain data used as basis for our analysis}
+\includegraphics[scale=0.9]{terrain2dplot.png}
+\caption{2D plot of the terrain data}
 \label{terraindata}
 \end{figure}
 
@@ -341,18 +336,75 @@ Looking beyond the Franke functions from now, and looking into real data, the pr
 In this part, we applied all of the three discussed methods on the terrain data. In order to get a general sense of each method's approach in reproducing the terrain data, we used all of the cropped image to train a model of each type. All of the data was used because splitting the data and plotting the results of the training data would not be possible as the \verb+sklearn.model_selection.train_test_split+ function does not return the indices of the training data to be used in the plots.
 
 The cropped region from figure \ref{terraindata} is shown in figure \ref{fig:realDataPlot}, entitled as "True Function". The learnt surfaces of all three methods trained on that region are shown corresponsingly in the same figure. For reasons to be discussed later in this part, we chose the degree 25 as our polynomial degree in building the design matrix.
+\begin{figure}[h!]\centering
+\includegraphics[scale=0.4]{Plots/PlotsRealData.png}
+\caption{Prediction for terrain data}
+\label{fig:realDataPlot}
+\end{figure}
+In order to select the best model, we performed the 10-fold cross validation analysis on the terrain data using the three models at different model complexities, and different $\lambda$ values for regularization in Ridge and Lasso regression. The results are shown in table \ref{table:1}), \ref{tbl:2} and \ref{tbl:3}. 
 
-In order to select the best model, we performed the 10-fold cross validation analysis on the terrain data using the three models at different model complexities, and different $\lambda$ values for regularization in Ridge and Lasso regression. The results are shown in table (add table here). 
+\begin{table}[h!]
+\centering
+\begin{tabular}{||c c||} 
+ \hline
+ Degree & MSE \\ 
+ \hline
+ 5 & 487.4188  \\ 
+ 10 & 130.5130  \\
+ 25 & 62.3598  \\
+ 25 & 57.0601  \\  
+ \hline
+\end{tabular}
+\caption{Mean MSE scores for OLS on the terrain data with increasing polynomial degree}
+\label{table:1}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{||c c c c c||}
+\hline
+& p = 5 & p = 10 & p = 25 & p = 50 \\
+\hline
+$\lambda$ = $10^{-4}$ & 487.4197 & 221.9297 & 138.3173 & 122.1696\\
+\hline
+$\lambda$ = $4.64^{-3}$ & 492.1422 & 261.9113 & 190.5044 & 175.4842\\ 
+\hline
+$\lambda$ = $2.15^{-1}$ & 564.7006 & 375.4598 & 276.1327 & 259.0530\\
+\hline
+$\lambda$ = 10 & 640.9542 & 516.4857 & 427.2646 & 400.7308\\
+\hline
+\end{tabular}
+\caption{Mean MSE scores for Ridge on the terrain data with increasing polynomial degree and $\lambda$}
+\label{tbl:2}
+\end{table}
+
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{||c c c c c||}
+\hline
+& p = 5 & p = 10 & p = 25 & p = 50 \\
+\hline
+$\lambda$ = $10^{-4}$ & 617.2067 & 508.5664 & 432.8633 & 413.3999\\
+\hline
+$\lambda$ = $4.64^{-3}$ & 617.6259 & 508.2350 & 430.0946 & 412.0222\\ 
+\hline
+$\lambda$ = $2.15^{-1}$ & 717.3227 & 685.6355 & 620.3984 & 621.7994\\
+\hline
+$\lambda$ = 10 & 4259.9043 & 4350.5270 & 4352.4810 & 4347.9143\\
+\hline
+\end{tabular}
+\caption{Mean MSE scores for Lasso on the terrain data with increasing polynomial degree and $\lambda$}
+\label{tbl:3}
+\end{table}
+
+
 
 This simulation shows that, for sensible reasons, low degree polynomials fail at learning, and thus reproducing, such a terrain with a large number of bends and spikes. Moreover, at all of the used polynomial degrees, OLS regression gives the best results among the used methods, as indicated by the low MSE values. The reason for that is, as already discussed, both Ridge and Lasso put penalities on large values of $\beta$, thereby smoothing the resulting curve. This is clearly visible in figure \ref{fig:realDataPlot}. Therefor, since the data is very noisy, learning a smooth function will not yield the best results, as such a function does not adapt to this noise.
 
 Before selecting OLS as our final model, we performed simple search over higher polynomial degrees using OLS only, as it has shown the most promising results. and in order to avoid lengthy computation times required by the other methods at such high degrees. The table (add another table) shows that as we increase the degree from 25 to 55 in steps of 10, we observe a minimal decrease in the MSE, with a comparably higher increase in computation time. For the reasons discussed above, we chose OLS regression at degree 25 as our final model for this study.
 
-\begin{figure}[h]\centering
-\includegraphics[scale=0.4]{Plots/PlotsRealData.png}
-\caption{Prediction for terrain data}
-\label{fig:realDataPlot}
-\end{figure}
+
 
 \clearpage
 
