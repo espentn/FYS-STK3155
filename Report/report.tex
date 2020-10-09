@@ -351,8 +351,7 @@ In order to select the best model, we performed the 10-fold cross validation ana
  \hline
  5 & 487.4188  \\ 
  10 & 130.5130  \\
- 25 & 62.3598  \\
- 25 & 57.0601  \\  
+ 25 & 62.3598  \\  
  \hline
 \end{tabular}
 \caption{Mean MSE scores for cross validation with OLS on the terrain data with increasing polynomial degree}
@@ -402,14 +401,14 @@ This simulation shows that, for sensible reasons, low degree polynomials fail at
 Before selecting OLS as our final model, we performed simple search over higher polynomial degrees using OLS only, as it has shown the most promising results. and in order to avoid lengthy computation times required by the other methods at such high degrees. The table \ref{table:4} shows that as we increase the degree from 25 to 55 in steps of 10, we observe a minimal decrease in the MSE, with a comparably higher increase in computation time. For the reasons discussed above, we chose OLS regression at degree 25 as our final model for this study.
 \begin{table}[h!]
 \centering
-\begin{tabular}{||c c||} 
+\begin{tabular}{||c c c||} 
  \hline
- Degree & MSE \\ 
+ Degree & MSE & Time [sec]\\ 
  \hline
- 25 & 62.1318  \\ 
- 35 & 60.7362  \\
- 45 & 58.0247  \\
- 55 & 58.9211  \\  
+ 25 & 62.1318 & 2.75 \\ 
+ 35 & 60.7362 & 8.02 \\
+ 45 & 58.0247 & 22.68 \\
+ 55 & 58.9211 & 49.34  \\  
  \hline
 \end{tabular}
 \caption{Mean MSE scores for cross validation with OLS on the terrain data with higher polynomial degrees}
