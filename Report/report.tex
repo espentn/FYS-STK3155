@@ -200,7 +200,7 @@ where $N$ is the polynomial degree.
 In this part, we performed the plain OLS regression on the data that is generated using the Franke function. Before that, we split the data into training set, on which the model is trained, and a testing sets, on which the model’s performance is evaluated for the goodness of the fit. The ratio of training to testing sets 70/30. The same train/test split was done in all the coming parts to ensure a fair and reproducible comparison between the different methods. This was achieved by using the same random seed in all the cells.
 
 \begin{figure}[h]
-\includegraphics[scale=0.35]{frankePlots.png}
+\includegraphics[scale=0.35]{Plots/frankePlots.png}
 \caption{OLS on the Franke function, with increasing polynomial degree}
 \end{figure}
 
@@ -208,7 +208,7 @@ For performing the OLS, a polynomial of degree five was used to generate the fea
 
 The metrics were then applied to both sets and the R2 coefficient and the Mean Square Error of each set were calculated. In addition, we generated a plot of the confidence intervals of the tunable parameters, shown in figure \ref{fig:confintOLS}. The Mean Square error was calculated by (\ref{MSE}) and the R2 coefficient was calculated by (\ref{R2score}).
 \begin{figure}
-\includegraphics[scale=0.5]{confidenceintervall.png}
+\includegraphics[scale=0.5]{Plots/confidenceintervall.png}
 \centering
 \caption{Confidence intervall of the tunable paramteres}
 \label{fig:confintOLS}
@@ -239,10 +239,10 @@ As the complexity increases, the bias starts decreasing indicating that the mode
 When the polynomial degree exceeds 5, the variance starts to increase in value indicating that the model has now entered into the realm of over-fitting. This variance will keep increasing as the complexity increases until the model has learned all the noise in the training data. This additional learning negatively impacts the model’s performance on new data and inhibits its ability to generalize to the domain of interest, which is the ultimate goal of any machine learning algorithm.
 
 \begin{figure}[h]\centering
-\subfloat[legend]{\label{a}\includegraphics[width=.45\linewidth]{Plots/partBplot10.jpg}}\hfill
-\subfloat[legend]{\label{b}\includegraphics[width=.45\linewidth]{Plots/partBplot20.jpg}} \par
-\subfloat[legend]{\label{c}\includegraphics[width=.45\linewidth]{Plots/partBplot30.jpg}}
-\caption{Plots of the relationships between error, bias and variance with bumber of bootstraps = 200, using the bias-variance tradeoff}
+\subfloat[n=10]{\label{a}\includegraphics[width=.45\linewidth]{Plots/partBplot10.jpg}}\hfill
+\subfloat[n=20]{\label{b}\includegraphics[width=.45\linewidth]{Plots/partBplot20.jpg}} \par
+\subfloat[n=30]{\label{c}\includegraphics[width=.45\linewidth]{Plots/partBplot30.jpg}}
+\caption{Plots of the relationships between error, bias and variance with number of bootstraps = 200, using the bias-variance tradeoff, with increasing number of datapoints \textit{n}}
 \label{fig}
 \end{figure}
 
@@ -265,10 +265,10 @@ For the hyper-parameter $\lambda$, we used four different values on a log-scale 
 
 From figure \ref{RidgeConfInt}, it can be seen that as the value of $\lambda$ increases the parameters beta and their confidence intervals become more centered around zero. This is because a higher value of  places a higher penalty on high values of , thereby preventing it from taking large values, which can lead to over-fitting.
 \begin{figure}[ht]\centering
-\subfloat[$\lambda=0.0001$]{\label{a}\includegraphics[width=.45\linewidth]{CIbetaridgelambda0.0001.png}}\hfill
-\subfloat[$\lambda=0.0046$]{\label{b}\includegraphics[width=.45\linewidth]{CIbetaridgelambda0.004641588833612782.png}} \par
-\subfloat[$\lambda=0.2154$]{\label{c}\includegraphics[width=.45\linewidth]{CIbetaridgelambda0.21544346900318845.png}}
-\subfloat[$\lambda=10.0$]{\label{c}\includegraphics[width=.45\linewidth]{CIbetaridgelambda10.0.png}}
+\subfloat[$\lambda=0.0001$]{\label{a}\includegraphics[width=.45\linewidth]{Plots/CIbetaridgelambda0.0001.png}}\hfill
+\subfloat[$\lambda=0.0046$]{\label{b}\includegraphics[width=.45\linewidth]{Plots/CIbetaridgelambda0.004641588833612782.png}} \par
+\subfloat[$\lambda=0.2154$]{\label{c}\includegraphics[width=.45\linewidth]{Plots/CIbetaridgelambda0.21544346900318845.png}}
+\subfloat[$\lambda=10.0$]{\label{c}\includegraphics[width=.45\linewidth]{Plots/CIbetaridgelambda10.0.png}}
 \caption{Plots of the confidence intervall for the ridge regression on the Franke function}
 \label{RidgeConfInt}
 \end{figure}
@@ -276,10 +276,10 @@ In the same analysis, comparing the values of the Mean Squared Error across the 
 
 Next, we applied the bootstrapping method to ridge regression to compare it with the results from OLS regression, and study its behavior in the bias-variance trade-off. See figure \ref{Ridgebootstrap}. The same behavior of decreasing bias and increasing variance is observed, though, the bias’s behavior is more evident at low values of noise variance. However, it it also important to note that as the value of $\lambda$ increases it takes the variance additional degrees to emerge and manifest itself. This is, again, expected because regularization fights over-fitting, which a model exhibits when the variance is high.
 \begin{figure}[h]\centering
-\subfloat[$\lambda=0.0001$]{\label{a}\includegraphics[width=.45\linewidth]{boostrapridge0.png}}\hfill
-\subfloat[$\lambda=0.0046$]{\label{b}\includegraphics[width=.45\linewidth]{boostrapridge1.png}} \par
-\subfloat[$\lambda=0.2154$]{\label{c}\includegraphics[width=.45\linewidth]{boostrapridge2.png}}\hfill
-\subfloat[$\lambda=10.0$]{\label{c}\includegraphics[width=.45\linewidth]{boostrapridge3.png}}\par
+\subfloat[$\lambda=0.0001$]{\label{a}\includegraphics[width=.45\linewidth]{Plots/boostrapridge0.png}}\hfill
+\subfloat[$\lambda=0.0046$]{\label{b}\includegraphics[width=.45\linewidth]{Plots/boostrapridge1.png}} \par
+\subfloat[$\lambda=0.2154$]{\label{c}\includegraphics[width=.45\linewidth]{Plots/boostrapridge2.png}}\hfill
+\subfloat[$\lambda=10.0$]{\label{c}\includegraphics[width=.45\linewidth]{Plots/boostrapridge3.png}}\par
 \caption{Plots of the relationships between error, bias and variance using Ridge bootstrapping}
 \label{Ridgebootstrap}
 \end{figure}
@@ -314,10 +314,10 @@ Finally, given all the previous analyses, and based on the results from the boot
 
 For such an input surface, this result is reasonable since Ridge finds a perfect spot between the other two methods. Indeed, it adapts to data trends, similar to what OLS does, but at the same time, it takes the generalization of the model into consideration by penalizing large values of $\beta$, therby not learning the noise in the training data, though in a less extreme fassion than Lasso.
 \begin{figure}[h]\centering
-\subfloat[$\lambda=0.0001$]{\label{a}\includegraphics[width=.45\linewidth]{boostraplasso0_cut.png}}\hfill
-\subfloat[$\lambda=0.0046$]{\label{b}\includegraphics[width=.45\linewidth]{boostraplasso1_cut.png}} \par
-\subfloat[$\lambda=0.2154$]{\label{c}\includegraphics[width=.45\linewidth]{boostraplasso2_cut.png}}\hfill
-\subfloat[$\lambda=10.0$]{\label{c}\includegraphics[width=.45\linewidth]{boostraplasso3_cut.png}}\par
+\subfloat[$\lambda=0.0001$]{\label{a}\includegraphics[width=.45\linewidth]{Plots/boostraplasso0_cut.png}}\hfill
+\subfloat[$\lambda=0.0046$]{\label{b}\includegraphics[width=.45\linewidth]{Plots/boostraplasso1_cut.png}} \par
+\subfloat[$\lambda=0.2154$]{\label{c}\includegraphics[width=.45\linewidth]{Plots/boostraplasso2_cut.png}}\hfill
+\subfloat[$\lambda=10.0$]{\label{c}\includegraphics[width=.45\linewidth]{Plots/boostraplasso3_cut.png}}\par
 \caption{Plots of the relationships between error, bias and variance using Lasso bootstrapping}
 \label{Lassobootstrap}
 \end{figure}
@@ -326,7 +326,7 @@ For such an input surface, this result is reasonable since Ridge finds a perfect
 \subsection{Introducing real terrain data}
 Looking beyond the Franke functions from now, and looking into real data, the previous methods will now be tested on terrain data. We use digital terrain data from Norway, see figure \ref{terraindata} for a visual presentation. 
 \begin{figure}[h]
-\includegraphics[scale=0.9]{terrain2dplot.png}
+\includegraphics[scale=0.9]{Plots/terrain2dplot.png}
 \caption{2D plot of the terrain data}
 \label{terraindata}
 \end{figure}
@@ -355,55 +355,66 @@ In order to select the best model, we performed the 10-fold cross validation ana
  25 & 57.0601  \\  
  \hline
 \end{tabular}
-\caption{Mean MSE scores for OLS on the terrain data with increasing polynomial degree}
+\caption{Mean MSE scores for cross validation with OLS on the terrain data with increasing polynomial degree}
 \label{table:1}
 \end{table}
 
 \begin{table}[h!]
 \centering
-\begin{tabular}{||c c c c c||}
+\begin{tabular}{||c c c c||}
 \hline
-& p = 5 & p = 10 & p = 25 & p = 50 \\
+& p = 5 & p = 10 & p = 25 \\
 \hline
-$\lambda$ = $10^{-4}$ & 487.4197 & 221.9297 & 138.3173 & 122.1696\\
+$\lambda$ = $10^{-4}$ & 487.4197 & 221.9297 & 138.3173 \\
 \hline
-$\lambda$ = $4.64^{-3}$ & 492.1422 & 261.9113 & 190.5044 & 175.4842\\ 
+$\lambda$ = $4.64^{-3}$ & 492.1422 & 261.9113 & 190.5044 \\ 
 \hline
-$\lambda$ = $2.15^{-1}$ & 564.7006 & 375.4598 & 276.1327 & 259.0530\\
+$\lambda$ = $2.15^{-1}$ & 564.7006 & 375.4598 & 276.1327 \\
 \hline
-$\lambda$ = 10 & 640.9542 & 516.4857 & 427.2646 & 400.7308\\
+$\lambda$ = 10 & 640.9542 & 516.4857 & 427.2646 \\
 \hline
 \end{tabular}
-\caption{Mean MSE scores for Ridge on the terrain data with increasing polynomial degree and $\lambda$}
+\caption{Mean MSE scores for cross validation with Ridge on the terrain data with increasing polynomial degree and $\lambda$}
 \label{tbl:2}
 \end{table}
 
 
 \begin{table}[h!]
 \centering
-\begin{tabular}{||c c c c c||}
+\begin{tabular}{||c c c c||}
 \hline
-& p = 5 & p = 10 & p = 25 & p = 50 \\
+& p = 5 & p = 10 & p = 25 \\
 \hline
-$\lambda$ = $10^{-4}$ & 617.2067 & 508.5664 & 432.8633 & 413.3999\\
+$\lambda$ = $10^{-4}$ & 617.2067 & 508.5664 & 432.8633\\
 \hline
-$\lambda$ = $4.64^{-3}$ & 617.6259 & 508.2350 & 430.0946 & 412.0222\\ 
+$\lambda$ = $4.64^{-3}$ & 617.6259 & 508.2350 & 430.0946 \\ 
 \hline
-$\lambda$ = $2.15^{-1}$ & 717.3227 & 685.6355 & 620.3984 & 621.7994\\
+$\lambda$ = $2.15^{-1}$ & 717.3227 & 685.6355 & 620.3984 \\
 \hline
-$\lambda$ = 10 & 4259.9043 & 4350.5270 & 4352.4810 & 4347.9143\\
+$\lambda$ = 10 & 4259.9043 & 4350.5270 & 4352.4810 \\
 \hline
 \end{tabular}
-\caption{Mean MSE scores for Lasso on the terrain data with increasing polynomial degree and $\lambda$}
+\caption{Mean MSE scores for cross validation with Lasso on the terrain data with increasing polynomial degree and $\lambda$}
 \label{tbl:3}
 \end{table}
-
-
-
 This simulation shows that, for sensible reasons, low degree polynomials fail at learning, and thus reproducing, such a terrain with a large number of bends and spikes. Moreover, at all of the used polynomial degrees, OLS regression gives the best results among the used methods, as indicated by the low MSE values. The reason for that is, as already discussed, both Ridge and Lasso put penalities on large values of $\beta$, thereby smoothing the resulting curve. This is clearly visible in figure \ref{fig:realDataPlot}. Therefor, since the data is very noisy, learning a smooth function will not yield the best results, as such a function does not adapt to this noise.
 
-Before selecting OLS as our final model, we performed simple search over higher polynomial degrees using OLS only, as it has shown the most promising results. and in order to avoid lengthy computation times required by the other methods at such high degrees. The table (add another table) shows that as we increase the degree from 25 to 55 in steps of 10, we observe a minimal decrease in the MSE, with a comparably higher increase in computation time. For the reasons discussed above, we chose OLS regression at degree 25 as our final model for this study.
-
+Before selecting OLS as our final model, we performed simple search over higher polynomial degrees using OLS only, as it has shown the most promising results. and in order to avoid lengthy computation times required by the other methods at such high degrees. The table \ref{table:4} shows that as we increase the degree from 25 to 55 in steps of 10, we observe a minimal decrease in the MSE, with a comparably higher increase in computation time. For the reasons discussed above, we chose OLS regression at degree 25 as our final model for this study.
+\begin{table}[h!]
+\centering
+\begin{tabular}{||c c||} 
+ \hline
+ Degree & MSE \\ 
+ \hline
+ 25 & 62.1318  \\ 
+ 35 & 60.7362  \\
+ 45 & 58.0247  \\
+ 55 & 58.9211  \\  
+ \hline
+\end{tabular}
+\caption{Mean MSE scores for cross validation with OLS on the terrain data with higher polynomial degrees}
+\label{table:4}
+\end{table}
 
 
 \clearpage
